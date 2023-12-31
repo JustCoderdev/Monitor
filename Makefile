@@ -27,7 +27,7 @@ clean_remote:
 build_remote:
 	@echo "Building... (Remote)"
 	@docker build -t monitor:0.1 .
-	# --progress=plain .
+	# --progress=plain
 
 run_remote: clean_remote
 	@echo "Running...  (Remote)"

@@ -5,44 +5,43 @@
 
 #include "../lib/jcstd/jcstd.h"
 #include "../lib/outils/o_sgr.h"
+#include "../lib/device/device.h"
+#include "../lib/outils/logger.h"
 
-#define ERROR(MSG) log_error(MSG, __FILE__, __LINE__)
 void log_error(string msg, string file, int line)
 {
 	/* clang-format off */
 	fprintf(stderr,
-			CSI    BOLD Z       FG_PAL(196) M "ERROR "
-			CSI NO_BOLD Z DIM Z FG_WHITE    M "[%s:%d] "
-			CSI RESET                       M "%s\n",
+			CSI RESET Z BOLD Z FG_PAL(196) M "ERROR "
+			CSI RESET Z DIM  Z FG_WHITE    M "[%s:%d] "
+			CSI RESET                      M "%s\n",
 			file, line, msg);
 	/* clang-format on */
 }
 
-string os_name(void);
 void term_clear(void);
 void term_altbuff_enter(void);
 void term_altbuff_exit(void);
 
 int main(void /* int argc, char *argv[] */)
 {
+#define DEBUG 0
+#if DEBUG
 
 	ERROR("Number < 0");
 	printf("I'm very " CSI BOLD M "bold" CSI RESET M "\n");
-
-
 	print_8bit_palette();
 
-
 	return EXIT_SUCCESS;
+#endif
 
+#if !DEBUG
+#undef DEBUG
 
-#if 0
 	nat UPDATE_RATE_S = 1;
-	m_nat iterations  = 1;
+	m_nat iterations  = 15;
 
 	setvbuf(stdout, NULL, _IOFBF, 0);
-
-
 	term_altbuff_enter();
 
 	while(--iterations > 0)
@@ -52,43 +51,40 @@ int main(void /* int argc, char *argv[] */)
 		printf("Remaining %us\n", iterations);
 		putchar('\n');
 
+		printf("OPERATING SYSTEM\n");
+		printf(" .name: %s\n", os_name());
+		printf(" .uptime: %s\n", os_uptime());
 		putchar('\n');
 
-		printf("Test2\n");
+		printf("NETWORK\n");
+		printf(" .ssid: %s\n", "WebpocketTest");
+		printf(" .address: %s\n", "Disconnected"); /* 192.168.1.150 */
 		putchar('\n');
+
+		printf("CPU\n");
+		printf(" .usage: %.1f%%\n", -37.34f);
+		printf(" .temp: %.1f%%\n", -74.12f);
 		putchar('\n');
 
+		/* RAM
+		 * [ ] usage (%)
+		 * [ ] used (Gb)
+		 * [ ] total (Gb) */
 
-/*
- * Network
- * [ ] ssid (“Webpocket”)
- * [ ] address (address, “Disconnected”)
+		/* Memory
+		 * [ ] usage (%)
+		 * [ ] used (Gb)
+		 * [ ] total (Gb) */
 
- * CPU
- * [ ] usage (%)
- * [ ] temperature (*C)
+		/* Battery
+		 * [ ] stored (%)
+		 * [ ] status (“charging”, “discharging”)
+		 * [ ] time until depleted (time)
+		 * [ ] time until full (time) */
 
- * RAM
- * [ ] usage (%)
- * [ ] used (Gb)
- * [ ] total (Gb)
-
- * Memory
- * [ ] usage (%)
- * [ ] used (Gb)
- * [ ] total (Gb)
-
- * Battery
- * [ ] stored (%)
- * [ ] status (“charging”, “discharging”)
- * [ ] time until depleted (time)
- * [ ] time until full (time)
-
- * Power
- * [ ] source (“socket”, “battery”)
- * [ ] draw (W)
- */
-
+		/* Power
+		 * [ ] source (“socket”, “battery”)
+		 * [ ] draw (W) */
 
 		printf("Press ^C to quit: ");
 
@@ -97,7 +93,6 @@ int main(void /* int argc, char *argv[] */)
 	}
 
 	term_altbuff_exit();
-	*/
 	return EXIT_SUCCESS;
 #endif
 }
@@ -125,12 +120,3 @@ void term_altbuff_exit(void)
 	printf(CSI "?1049l");
 }
 
-
-/* Operating System
- * [ ] name ("macOS Monterey")
- * [ ] uptime (time) */
-
-string os_name(void)
-{
-	return "F";
-}

@@ -81,7 +81,7 @@
 #define BG_BR_WHITE "107"
 
 
-void print_8bit_palette()
+void print_8bit_palette(void)
 {
 	int x, y, rx, ry;
 

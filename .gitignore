@@ -1,5 +1,4 @@
 .DS_Store
-bin/
 
-last_session.vim
-session.vim
+.old_session.vim
+.session.vim
