@@ -3,21 +3,9 @@
 
 #include <unistd.h>
 
-#include "../lib/jcstd/jcstd.h"
-#include "../lib/outils/o_sgr.h"
 #include "../lib/device/device.h"
-#include "../lib/outils/logger.h"
-
-void log_error(string msg, string file, int line)
-{
-	/* clang-format off */
-	fprintf(stderr,
-			CSI RESET Z BOLD Z FG_PAL(196) M "ERROR "
-			CSI RESET Z DIM  Z FG_WHITE    M "[%s:%d] "
-			CSI RESET                      M "%s\n",
-			file, line, msg);
-	/* clang-format on */
-}
+#include "../lib/jcstd/jcstd.h"
+#include "../lib/outils/outils.h"
 
 void term_clear(void);
 void term_altbuff_enter(void);
@@ -25,18 +13,21 @@ void term_altbuff_exit(void);
 
 int main(void /* int argc, char *argv[] */)
 {
-#define DEBUG 0
-#if DEBUG
+#define DEBUGGING 1
+#if DEBUGGING
 
 	ERROR("Number < 0");
 	printf("I'm very " CSI BOLD M "bold" CSI RESET M "\n");
 	print_8bit_palette();
 
+	FATAL("I'm an ugly error :)");
+	exit(1);
+
 	return EXIT_SUCCESS;
 #endif
 
-#if !DEBUG
-#undef DEBUG
+#if !DEBUGGING
+#undef DEBUGGING
 
 	nat UPDATE_RATE_S = 1;
 	m_nat iterations  = 15;
@@ -119,4 +110,3 @@ void term_altbuff_exit(void)
 {
 	printf(CSI "?1049l");
 }
-

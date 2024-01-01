@@ -1,14 +1,15 @@
+extern int TRANSLATION_MOCK;
+
 #ifdef __APPLE__
 
 #include <errno.h>
 #include <sys/sysctl.h>
 
 #include "../jcstd/jcstd.h"
-#include "../outils/logger.h"
+#include "../outils/outils.h"
 #include "device.h"
 
 #define SYS_ERROR -1
-
 
 string os_name(void)
 {
@@ -37,11 +38,10 @@ string os_name(void)
 	return p;
 }
 
-
 string os_uptime(void)
 {
 	return "14h 15m 13s";
 }
 
-
+#undef SYS_ERROR
 #endif

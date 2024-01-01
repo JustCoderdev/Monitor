@@ -1,6 +1,12 @@
+# General Makefile for C projects
 
-FLAGS=-xc -Wall -Wextra -Werror -Wpedantic -pedantic -pedantic-errors -std=c89 -fcolor-diagnostics
-SRC_FILES=$(wildcard src/*.c) $(wildcard lib/file/*.c) $(wildcard lib/device/*.c)
+FLAGS=-xc -Wall -Wextra -Werror -Wpedantic \
+	  -pedantic -pedantic-errors -std=c89  \
+	  -fcolor-diagnostics
+
+SRC_FILES=$(wildcard src/*.c)     \
+		  $(wildcard lib/*/*.c)   \
+		  $(wildcard lib/*/*/*.c) \
 
 
 local: clean build run
@@ -11,7 +17,7 @@ clean:
 build: clean
 	@echo "Compiling..."
 	@mkdir bin
-	@clang ${FLAGS} ${SRC_FILES} -o bin/monitor
+	clang ${FLAGS} ${SRC_FILES} -o bin/monitor
 
 run:
 	@echo "Running..."

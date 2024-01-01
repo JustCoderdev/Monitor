@@ -3,11 +3,7 @@
 #ifndef OUTILS_LIB_H
 #define OUTILS_LIB_H
 
-
-
-/***** Logger
- *
- * */
-
+#include "./logger/logger.h"
+#include "./sgr/sgr.h"
 
 #endif
