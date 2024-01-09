@@ -57,7 +57,7 @@
 #define BG_CYAN			"46"
 #define BG_WHITE		"47"
 #define BG_PAL(CODE)	"48;5;" #CODE
-#define BG_RGB(R, G, B) "48;2;" #R";"#G ";" #B
+#define BG_RGB(R, G, B) "48;2;" #R";"#G";"#B
 #define BG_DEFAULT		"49"
 
 /* Foreground bright colors 3-bit */
@@ -81,6 +81,7 @@
 #define BG_BR_WHITE "107"
 
 
+void print_3bit_palette(void);
 void print_8bit_palette(void);
 
 

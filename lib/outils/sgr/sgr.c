@@ -1,8 +1,26 @@
 #include "sgr.h"
 
+#include "../../jcstd/jcstd.h"
+
+
+void print_3bit_palette(void)
+{
+	m_nat i;
+
+	for(i = 0; i < 8; ++i)
+		printf(CSI "4%d" M " %3.d " CSI RESET M, i, i);
+
+	putchar('\n');
+
+	for(i = 0; i < 8; ++i)
+		printf(CSI "10%d" M " %3.d " CSI RESET M, i, i);
+
+	putchar('\n');
+}
+
 void print_8bit_palette(void)
 {
-	int x, y, rx, ry;
+	m_nat x, y, rx, ry;
 
 	for(y = 0; y < 3; ++y)
 	{

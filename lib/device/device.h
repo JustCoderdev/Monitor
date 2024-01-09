@@ -3,22 +3,24 @@
 #ifndef DEVICE_LIB_H
 #define DEVICE_LIB_H
 
-
 /* ----- Operating System -----
  * [ ] name ("macOS Monterey")
  * [ ] uptime (time)
- * ----- ----- */
+ * ---------- */
 
 extern string os_name(void);
 extern string os_uptime(void);
 
-/* Network
+
+/* ----- Network -----
  * [ ] ssid (“Webpocket”)
- * [ ] address (address, “Disconnected”) */
+ * [ ] address (address, “Disconnected”)
+ * ---------- */
 
 
-/* CPU
+/* ----- CPU -----
  * [ ] usage (%)
- * [ ] temperature (*C) */
+ * [ ] temperature (*C)
+ * ---------- */
 
 #endif

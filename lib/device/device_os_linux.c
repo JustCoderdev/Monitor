@@ -1,18 +1,62 @@
+#ifndef __linux__
 extern const int TRANSLATION_MOCK;
+#else
 
-#ifdef __linux__
+#include <errno.h>
+#include <time.h>
+#include <unistd.h>
 
+#include "../jcstd/jcstd.h"
 #include "../outils/outils.h"
 #include "device.h"
 
+#define SYS_ERROR -1
+
 string os_name(void)
 {
-	FATAL("\"os_name(void)\" Not implemented!");
+	static char* name = NULL;
+	size name_len = 0;
+
+	string file_path = "/proc/sys/kernel/ostype";
+	FILE* file_ostype = NULL;
+	char c;
+	size i;
+
+	if(name != NULL) return name;
+
+	file_ostype = fopen(file_path, "r");
+	if(file_ostype == NULL) goto error;
+
+	while((c = getc(file_ostype)) != EOF)
+	{
+		name_len++;
+	}
+
+	ASSERT(name_len != 0)
+	name = malloc(name_len);
+
+	rewind(file_ostype);
+	for(i = 0; i < name_len; ++i)
+	{
+		name[i] = getc(file_ostype);
+	}
+
+	return name;
+
+
+error:
+	fclose(file_ostype);
+	free(name);
+
+	ERROR(strerror(errno));
+	return "Error";
 }
 
 string os_uptime(void)
 {
-	FATAL("\"os_uptime(void)\" Not implemented!");
+	WARN("\"os_uptime\" not implemented in linux version");
+	return "14h 15m 13s";
 }
 
+#undef SYS_ERROR
 #endif

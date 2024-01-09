@@ -6,9 +6,16 @@
 #define JC_STD_H
 
 
-/* Boolean definition */
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+#define _STRING(VALUE) #VALUE
+#define STRING(SYMBOL) _STRING(SYMBOL)
+
+
+/* ----- Boolean definition -----
+ * ----- ----- */
 enum bool_t {
-	true  = (1 == 1),
+	true = (1 == 1),
 	false = (1 != 1)
 };
 
@@ -16,33 +23,32 @@ typedef const enum bool_t bool;
 typedef enum bool_t m_bool;
 
 
-/* Natural numbers (unsigned) definition */
-typedef const unsigned int nat;
+/* ----- Natural numbers definition -----
+ * ----- ----- */
+typedef const unsigned int nat; /* %u */
 typedef unsigned int m_nat;
 
-typedef unsigned long size; /* %lu */
 
-/* String literal definition */
+/* ----- Character definition -----
+ * ----- -----*/
+/* typedef const unsigned char uchar;  /1* %c *1/ */
+/* typedef unsigned char m_char;	   /1* %c *1/ */
+
 typedef const char* const string;
 
-/* #define STR_Fmt "\"%s\"(%lu)" */
-/* #define STR_ARG(string) string.ptr, string.length */
 
-/* Mutable string definition */
+/* ----- Various definition -----
+ * ----- ----- */
+typedef unsigned long size; /* %lu */
+
+
+/* ----- Mutable string definition -----
+ * -----  -----*/
 typedef struct {
 	char* ptr;
-	size_t length;
+	size length;
 } m_string;
 
-
-m_string gen_string(const char* in_string)
-{
-	m_string out_string = {0};
-
-	out_string.ptr	  = (char*)in_string;
-	out_string.length = strlen(in_string);
-
-	return out_string;
-}
+m_string gen_string(const char* in_string);
 
 #endif

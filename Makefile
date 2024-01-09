@@ -1,12 +1,16 @@
 # General Makefile for C projects
+# to set flags use $(flag_name) and make flag_name=10
 
-FLAGS=-xc -Wall -Wextra -Werror -Wpedantic \
-	  -pedantic -pedantic-errors -std=c89  \
-	  -fcolor-diagnostics
+FLAGS = -xc -Wall -Wextra -Werror -Wpedantic \
+	  	-pedantic -pedantic-errors -std=c89  \
+	  	-fcolor-diagnostics
+		# \ -F/usr/include/linux
 
-SRC_FILES=$(wildcard src/*.c)     \
-		  $(wildcard lib/*/*.c)   \
-		  $(wildcard lib/*/*/*.c) \
+
+SRC_FILES=$(wildcard src/*.c)       \
+		  $(wildcard lib/*/*.c)     \
+		  $(wildcard lib/*/*/*.c)   \
+		  $(wildcard lib/*/*/*/*.c) \
 
 
 local: clean build run
@@ -22,13 +26,14 @@ build: clean
 run:
 	@echo "Running..."
 	@chmod +x bin/monitor
-	@cd bin && ./monitor
+	@cd bin && ./monitor $(iter)
 
 
 remote: clean_remote build_remote run_remote
 clean_remote:
 	@echo "Cleaning... (Remote)"
 	@docker rm -f monitor_instance
+	@docker image rm -f monitor:0.1
 
 build_remote:
 	@echo "Building... (Remote)"

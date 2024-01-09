@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <errno.h>
 #include <unistd.h>
 
 #include "../lib/device/device.h"
+#include "../lib/file/reader/file_reader.h"
 #include "../lib/jcstd/jcstd.h"
 #include "../lib/outils/outils.h"
 
@@ -11,26 +13,36 @@ void term_clear(void);
 void term_altbuff_enter(void);
 void term_altbuff_exit(void);
 
-int main(void /* int argc, char *argv[] */)
+
+int main(int argc, char* argv[])
 {
-#define DEBUGGING 1
+#define DEBUGGING 0
 #if DEBUGGING
-
-	ERROR("Number < 0");
-	printf("I'm very " CSI BOLD M "bold" CSI RESET M "\n");
-	print_8bit_palette();
-
-	FATAL("I'm an ugly error :)");
-	exit(1);
-
-	return EXIT_SUCCESS;
-#endif
-
-#if !DEBUGGING
 #undef DEBUGGING
 
+	FILE* file = fopen("../test.txt", "r");
+	void* _ = (void*)file_read_buffer_until('[', file);
+	string buffer = file_read_buffer_until(']', file);
+
+	(void)_;
+
+	if(file == NULL) goto error;
+	if(buffer == NULL) goto error;
+
+	printf("buffer: '%s'\n", buffer);
+
+	return EXIT_SUCCESS;
+
+error:
+	ERRNO("AAAAAA")
+	return EXIT_FAILURE;
+
+#else
+
 	nat UPDATE_RATE_S = 1;
-	m_nat iterations  = 15;
+	m_nat iterations = 15;
+
+	if(argc == 2) iterations = atoi(argv[1]);
 
 	setvbuf(stdout, NULL, _IOFBF, 0);
 	term_altbuff_enter();
@@ -39,7 +51,7 @@ int main(void /* int argc, char *argv[] */)
 	{
 		term_clear();
 
-		printf("Remaining %us\n", iterations);
+		printf("Remaining %us\n", iterations * UPDATE_RATE_S);
 		putchar('\n');
 
 		printf("OPERATING SYSTEM\n");
@@ -77,6 +89,7 @@ int main(void /* int argc, char *argv[] */)
 		 * [ ] source (“socket”, “battery”)
 		 * [ ] draw (W) */
 
+		putchar('\n');
 		printf("Press ^C to quit: ");
 
 		fflush(stdout);
