@@ -5,7 +5,7 @@
 
 
 ## Todo
-- [ ] Major refactor and recompact
+- [ ] Major refactor and recompacting
 - [ ] Implement macOS fields
 - [ ] Support SIGSTOP clearing stuff
 - [ ] Implement alpine fields
