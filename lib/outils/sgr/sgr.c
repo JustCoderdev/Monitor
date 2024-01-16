@@ -5,7 +5,7 @@
 
 void print_3bit_palette(void)
 {
-	m_nat i;
+	u8 i;
 
 	for(i = 0; i < 8; ++i)
 		printf(CSI "4%d" M " %3.d " CSI RESET M, i, i);
@@ -20,7 +20,7 @@ void print_3bit_palette(void)
 
 void print_8bit_palette(void)
 {
-	m_nat x, y, rx, ry;
+	u8 x, y, rx, ry;
 
 	for(y = 0; y < 3; ++y)
 	{
@@ -30,7 +30,7 @@ void print_8bit_palette(void)
 			{
 				for(rx = 0; rx < 6; ++rx)
 				{
-					int code = 16 + 18 * x + rx + 6 * y + 36 * ry;
+					u8 code = 16 + 18 * x + rx + 6 * y + 36 * ry;
 
 					if(x)
 						printf(CSI FG_BLACK M);

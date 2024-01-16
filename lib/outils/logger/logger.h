@@ -13,35 +13,28 @@
 
 #define ASSERT(EXPR) log_assert(EXPR, STRING(EXPR), __FILE__, __LINE__);
 
-
-
-enum log_level_t {
+typedef enum {
 	LOG_TRACE = 0,
 	LOG_INFO,
 	LOG_DEBUG,
 	LOG_WARN,
 	LOG_ERROR,
 	LOG_FATAL
-};
-
-typedef const enum log_level_t log_level;
-typedef enum log_level_t m_log_level;
+} log_level;
 
 
-extern nat log_level_color(log_level level);
-extern string log_level_string(log_level level);
+extern u8 log_level_color(log_level level);
+extern literal log_level_string(log_level level);
+extern void log_msg(log_level level, char* msg, char* file, int line);
 
-extern void log_msg(log_level level, string msg, string file, int line);
+extern void log_trace(char* msg, char* file, int line);
+extern void log_info(char* msg, char* file, int line);
+extern void log_debug(char* msg, char* file, int line);
+extern void log_warn(char* msg, char* file, int line);
+extern void log_error(char* msg, char* file, int line);
+extern void log_errno(char* msg, int error_code, char* file, int line);
+extern void log_fatal(char* msg, char* file, int line);
 
-extern void log_trace(string msg, string file, int line);
-extern void log_info(string msg, string file, int line);
-extern void log_debug(string msg, string file, int line);
-extern void log_warn(string msg, string file, int line);
-extern void log_error(string msg, string file, int line);
-extern void log_errno(string msg, int error_code, string file, int line);
-extern void log_fatal(string msg, string file, int line);
-
-extern void log_assert(bool assertion, string expression, string file,
-					   int line);
+extern void log_assert(bool assertion, char* expression, char* file, int line);
 
 #endif

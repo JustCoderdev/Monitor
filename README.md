@@ -3,7 +3,6 @@
 > Monitor is a simple program to keep track of server statistics
 > It updates the screen every second if the lid is open
 
-
 ## Todo
 - [ ] Major refactor and recompacting
 - [ ] Implement macOS fields

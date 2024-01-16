@@ -6,17 +6,17 @@ extern const int TRANSLATION_MOCK;
 #include <sys/sysctl.h>
 #include <time.h>
 
+#include "../device.h"
 #include "../jcstd/jcstd.h"
 #include "../outils/outils.h"
-#include "device.h"
 
 #define SYS_ERROR -1
 
-string os_name(void)
+char* os_name(void)
 {
-	string NAME_KEY = "kern.hostname";
+	literal NAME_KEY = "kern.hostname";
 	static char* name = NULL;
-	size name_len;
+	u64 name_len;
 
 	if(name != NULL) return name;
 
@@ -36,33 +36,12 @@ error:
 	return "error";
 }
 
-struct timespan_t {
-	m_nat s, m, h, d;
-};
-struct timespan_t timespan_from_seconds(nat seconds)
-{
-	struct timespan_t timespan = {0};
-	m_nat tot_s, tot_m, tot_h;
-
-	tot_s = seconds;
-	timespan.s = tot_s % 60;
-
-	tot_m = (tot_s - timespan.s) / 60;
-	timespan.m = tot_m % 60;
-
-	tot_h = (tot_m - timespan.m) / 60;
-	timespan.h = tot_h % 60;
-
-	timespan.d = (tot_h - timespan.h) / 24;
-	return timespan;
-}
-
-string os_uptime(void)
+char* os_uptime(void)
 {
 	struct timeval boot_time = {0};
-	size len = sizeof(boot_time);
+	u64 len = sizeof(boot_time);
 
-	time_t now_time = time(0);
+	const time_t now_time = time(0);
 	const struct tm* const tm = localtime(&now_time);
 
 	const int OUT_LEN = 16;

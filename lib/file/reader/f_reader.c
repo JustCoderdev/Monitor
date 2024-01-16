@@ -4,14 +4,13 @@
 #include "file_reader.h"
 
 
-string file_read_buffer_until(char delimiter, FILE* file)
+char* file_read_buffer_until(char delimiter, FILE* file)
 {
 	char* buffer = NULL;
-	size buffer_len = 0;
+	u64 buffer_len = 0;
 	char c = '\0';
-	m_nat i;
+	u64 i;
 
-	INFO("Reading buffer")
 	ASSERT(file != NULL)
 
 	while((c = getc(file)) != EOF)
@@ -40,19 +39,36 @@ string file_read_buffer_until(char delimiter, FILE* file)
 
 error:
 	free(buffer);
-	clearerr(file);
 
 	ERROR(strerror(errno));
+	clearerr(file);
+
 	return NULL;
 }
 
 
-
-string file_read_until(char delimiter, FILE* file)
+bool file_read_until(char delimiter, FILE* file)
 {
-	(void)delimiter;
-	(void)file;
+	char c = '\0';
 
-	FATAL("\"file_read_until\" Not implemented")
-	return NULL;
+	ASSERT(file != NULL)
+
+	while((c = getc(file)) != EOF)
+	{
+		if(c != delimiter) continue;
+
+		INFO("Found delimiter")
+		ungetc(c, file);
+		break;
+	}
+
+	if(ferror(file)) goto error;
+
+	return false;
+
+error:
+	ERROR(strerror(errno));
+	clearerr(file);
+
+	return true;
 }

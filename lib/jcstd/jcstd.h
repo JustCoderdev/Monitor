@@ -12,43 +12,44 @@
 #define STRING(SYMBOL) _STRING(SYMBOL)
 
 
-/* ----- Boolean definition -----
- * ----- ----- */
+/* ------  Numbers definition  ------ */
+typedef signed char s8;   /* %d or %c */
+typedef unsigned char u8; /* %u or %c */
+
+typedef signed short s16;   /* %d */
+typedef unsigned short u16; /* %u */
+
+typedef signed int s32;   /* %d */
+typedef unsigned int u32; /* %u */
+
+typedef signed long int s64;   /* %ld */
+typedef unsigned long int u64; /* %lu */
+
+
+/* ------  Boolean definition  ------ */
 enum bool_t {
-	true = (1 == 1),
-	false = (1 != 1)
+	true  = (u8)(1 == 1),
+	false = (u8)(1 != 1)
 };
 
-typedef const enum bool_t bool;
-typedef enum bool_t m_bool;
+typedef enum bool_t bool; /* %d */
 
 
-/* ----- Natural numbers definition -----
- * ----- ----- */
-typedef const unsigned int nat; /* %u */
-typedef unsigned int m_nat;
+/* ------  Natural numbers definition  ------ */
+/* typedef unsigned int nat; /1* %u *1/ */
 
 
-/* ----- Character definition -----
- * ----- -----*/
-/* typedef const unsigned char uchar;  /1* %c *1/ */
-/* typedef unsigned char m_char;	   /1* %c *1/ */
-
-typedef const char* const string;
+/* ------  Character definition  ------ */
+typedef char* const literal;
+typedef unsigned char uchar;  /* %c */
 
 
-/* ----- Various definition -----
- * ----- ----- */
-typedef unsigned long size; /* %lu */
-
-
-/* ----- Mutable string definition -----
- * -----  -----*/
+/* ------  Mutable string definition  ------ */
 typedef struct {
-	char* ptr;
-	size length;
-} m_string;
+	const char* ptr;
+	u64 length;
+} string_t;
 
-m_string gen_string(const char* in_string);
+string_t gen_string(const char* in_string);
 
 #endif

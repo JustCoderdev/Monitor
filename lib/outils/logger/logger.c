@@ -1,11 +1,12 @@
 #include "logger.h"
 
 #include <stdio.h>
+
 #include <errno.h>
 
 #include "../sgr/sgr.h"
 
-nat log_level_color(log_level level)
+u8 log_level_color(log_level level)
 {
 	switch(level)
 	{
@@ -20,7 +21,7 @@ nat log_level_color(log_level level)
 	}
 }
 
-string log_level_string(log_level level)
+literal log_level_string(log_level level)
 {
 	switch(level)
 	{
@@ -36,7 +37,7 @@ string log_level_string(log_level level)
 }
 
 
-void log_msg(log_level level, string msg, string file, int line)
+void log_msg(log_level level, char* msg, char* file, int line)
 {
 	/* clang-format off */
 	fprintf(stderr,
@@ -48,32 +49,32 @@ void log_msg(log_level level, string msg, string file, int line)
 }
 
 
-void log_trace(string msg, string file, int line)
+void log_trace(char* msg, char* file, int line)
 {
 	log_msg(LOG_TRACE, msg, file, line);
 }
 
-void log_info(string msg, string file, int line)
+void log_info(char* msg, char* file, int line)
 {
 	log_msg(LOG_INFO, msg, file, line);
 }
 
-void log_debug(string msg, string file, int line)
+void log_debug(char* msg, char* file, int line)
 {
 	log_msg(LOG_DEBUG, msg, file, line);
 }
 
-void log_warn(string msg, string file, int line)
+void log_warn(char* msg, char* file, int line)
 {
 	log_msg(LOG_WARN, msg, file, line);
 }
 
-void log_error(string msg, string file, int line)
+void log_error(char* msg, char* file, int line)
 {
 	log_msg(LOG_ERROR, msg, file, line);
 }
 
-void log_errno(string msg, int error_code, string file, int line)
+void log_errno(char* msg, int error_code, char* file, int line)
 {
 	/* clang-format off */
 	fprintf(stderr,
@@ -86,7 +87,7 @@ void log_errno(string msg, int error_code, string file, int line)
 	/* clang-format on */
 }
 
-void log_fatal(string msg, string file, int line)
+void log_fatal(char* msg, char* file, int line)
 {
 	/* clang-format off */
 	fprintf(stderr,
@@ -101,7 +102,7 @@ void log_fatal(string msg, string file, int line)
 }
 
 
-void log_assert(bool assertion, string expression, string file, int line)
+void log_assert(bool assertion, char* expression, char* file, int line)
 {
 	if(assertion) return;
 

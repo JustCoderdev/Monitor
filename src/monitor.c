@@ -1,10 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <errno.h>
 #include <unistd.h>
 
-#include "../lib/device/device.h"
+#include "../lib/device.h"
 #include "../lib/file/reader/file_reader.h"
 #include "../lib/jcstd/jcstd.h"
 #include "../lib/outils/outils.h"
@@ -16,31 +13,38 @@ void term_altbuff_exit(void);
 
 int main(int argc, char* argv[])
 {
-#define DEBUGGING 0
-#if DEBUGGING
-#undef DEBUGGING
+	ASSERT(sizeof(s8) == 1)
+	ASSERT(sizeof(s16) == 2)
+	ASSERT(sizeof(s32) == 4)
+	ASSERT(sizeof(s64) == 8)
 
+#if 1
+	(void)argc;
+	(void)argv;
+
+#else
 	FILE* file = fopen("../test.txt", "r");
-	void* _ = (void*)file_read_buffer_until('[', file);
-	string buffer = file_read_buffer_until(']', file);
+	char* buffer;
 
-	(void)_;
+	(void)argc;
+	(void)argv;
+
+	(void)file_read_until('[', file);
+	buffer = file_read_buffer_until(']', file);
 
 	if(file == NULL) goto error;
 	if(buffer == NULL) goto error;
 
 	printf("buffer: '%s'\n", buffer);
 
-	return EXIT_SUCCESS;
-
 error:
 	ERRNO("AAAAAA")
 	return EXIT_FAILURE;
 
-#else
+	/* #else */
 
-	nat UPDATE_RATE_S = 1;
-	m_nat iterations = 15;
+	const u8 UPDATE_RATE_S = 1;
+	u8 iterations = 15;
 
 	if(argc == 2) iterations = atoi(argv[1]);
 
@@ -97,8 +101,9 @@ error:
 	}
 
 	term_altbuff_exit();
-	return EXIT_SUCCESS;
 #endif
+
+	return EXIT_SUCCESS;
 }
 
 
