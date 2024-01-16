@@ -6,7 +6,7 @@
 
 #include "../sgr/sgr.h"
 
-u8 log_level_color(log_level level)
+u8 log_level_color_internal(log_level level)
 {
 	switch(level)
 	{
@@ -21,7 +21,7 @@ u8 log_level_color(log_level level)
 	}
 }
 
-literal log_level_string(log_level level)
+literal log_level_string_internal(log_level level)
 {
 	switch(level)
 	{
@@ -37,47 +37,47 @@ literal log_level_string(log_level level)
 }
 
 
-void log_msg(log_level level, char* msg, char* file, int line)
+void log_msg_internal(log_level level, char* msg, char* file, int line)
 {
 	/* clang-format off */
-	fprintf(stderr,
+	fprintf(LOG_STREAM,
 			CSI RESET Z BOLD Z FG_WHITE Z "3%d" M "%s"
 			CSI RESET Z FG_BR_BLACK  M " [%s:%d] "
 			CSI RESET                M "%s\n",
-			log_level_color(level), log_level_string(level), file, line, msg);
+			log_level_color_internal(level), log_level_string_internal(level), file, line, msg);
 	/* clang-format on */
 }
 
 
-void log_trace(char* msg, char* file, int line)
+void log_trace_internal(char* msg, char* file, int line)
 {
-	log_msg(LOG_TRACE, msg, file, line);
+	log_msg_internal(LOG_TRACE, msg, file, line);
 }
 
-void log_info(char* msg, char* file, int line)
+void log_info_internal(char* msg, char* file, int line)
 {
-	log_msg(LOG_INFO, msg, file, line);
+	log_msg_internal(LOG_INFO, msg, file, line);
 }
 
-void log_debug(char* msg, char* file, int line)
+void log_debug_internal(char* msg, char* file, int line)
 {
-	log_msg(LOG_DEBUG, msg, file, line);
+	log_msg_internal(LOG_DEBUG, msg, file, line);
 }
 
-void log_warn(char* msg, char* file, int line)
+void log_warn_internal(char* msg, char* file, int line)
 {
-	log_msg(LOG_WARN, msg, file, line);
+	log_msg_internal(LOG_WARN, msg, file, line);
 }
 
-void log_error(char* msg, char* file, int line)
+void log_error_internal(char* msg, char* file, int line)
 {
-	log_msg(LOG_ERROR, msg, file, line);
+	log_msg_internal(LOG_ERROR, msg, file, line);
 }
 
-void log_errno(char* msg, int error_code, char* file, int line)
+void log_errno_internal(char* msg, int error_code, char* file, int line)
 {
 	/* clang-format off */
-	fprintf(stderr,
+	fprintf(LOG_STREAM,
 			CSI RESET Z BOLD Z FG_WHITE Z FG_RED M "ERROR"
 			CSI RESET Z FG_BR_BLACK              M " [%s:%d] "
 			CSI RESET                            M "%s \\ \n"
@@ -87,10 +87,10 @@ void log_errno(char* msg, int error_code, char* file, int line)
 	/* clang-format on */
 }
 
-void log_fatal(char* msg, char* file, int line)
+void log_fatal_internal(char* msg, char* file, int line)
 {
 	/* clang-format off */
-	fprintf(stderr,
+	fprintf(LOG_STREAM,
 			/* CSI RESET Z BOLD    Z BG_MAGENTA Z FG_WHITE    M " FATAL " */
 			CSI RESET Z BOLD Z BG_BLACK Z FG_WHITE M " FATAL "
 			CSI RESET Z FG_BR_BLACK                M " [%s:%d] "
@@ -102,12 +102,12 @@ void log_fatal(char* msg, char* file, int line)
 }
 
 
-void log_assert(bool assertion, char* expression, char* file, int line)
+void log_assert_internal(bool assertion, char* expression, char* file, int line)
 {
 	if(assertion) return;
 
 	/* clang-format off */
-	fprintf(stderr,
+	fprintf(LOG_STREAM,
 			CSI RESET Z BOLD    Z BG_RED   Z FG_WHITE M " ASSERT "
 			CSI RESET Z FG_BR_BLACK                   M " [%s:%d] "
 			CSI RESET                                 M "Assertion failed: \"%s\"\n",

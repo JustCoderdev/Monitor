@@ -40,7 +40,7 @@ typedef enum bool_t bool; /* %d */
 
 
 /* ------  Character definition  ------ */
-typedef char* const literal;
+typedef const char* const literal;
 typedef unsigned char uchar;  /* %c */
 
 

@@ -40,7 +40,7 @@ build_remote:
 	@docker build -t monitor:0.1 .
 	# --progress=plain
 
-run_remote: clean_remote
+run_remote:
 	@echo "Running...  (Remote)"
 	@docker run -i --name monitor_instance monitor:0.1
 

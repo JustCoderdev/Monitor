@@ -10,53 +10,75 @@ extern const int TRANSLATION_MOCK;
 #include "../jcstd/jcstd.h"
 #include "../outils/outils.h"
 
-#define SYS_ERROR -1
-
-char* os_name(void)
+char *device_os_name(void)
 {
-	static char* name = NULL;
-	u64 name_len = 0;
+	static char *os_name = NULL;
+	if(os_name != NULL) return os_name;
 
-	literal file_path = "/proc/sys/kernel/ostype";
-	FILE* file_ostype = NULL;
-	char c;
-	u64 i;
-
-	if(name != NULL) return name;
-
-	file_ostype = fopen(file_path, "r");
-	if(file_ostype == NULL) goto error;
-
-	while((c = getc(file_ostype)) != EOF)
 	{
-		name_len++;
+		literal FILE_PATH = "/proc/sys/kernel/ostype";
+
+		FILE *os_name_file = fopen(FILE_PATH, "r");
+		if(os_name_file == NULL)
+		{
+			log_errno("Unable to read OS-type file");
+			return "error: A";
+		}
+
+		os_name = file_read_buffer_until('\n', os_name_file);
+		fclose(os_name_file);
+
+		printf("Buffer content: '%*s'\n", 5, os_name);
+
+		if(os_name == NULL) return "error: B";
 	}
 
-	ASSERT(name_len != 0)
-	name = malloc(name_len);
+	return os_name;
+}
 
-	rewind(file_ostype);
-	for(i = 0; i < name_len; ++i)
+char *device_os_uptime(void)
+{
+#define OUT_LENGTH 16
+	literal FILE_PATH = "/proc/uptime";
+	FILE *uptime_file = fopen(FILE_PATH, "r");
+	char *buffer = NULL;
+	char *out = malloc(OUT_LENGTH * sizeof(char));
+	struct timespan_t uptime;
+
+	if(uptime_file == NULL)
 	{
-		name[i] = getc(file_ostype);
+		log_errno("Unable to read uptime file");
+		return "Error";
 	}
 
-	return name;
+	buffer = file_read_buffer_until('.', uptime_file);
+	fclose(uptime_file);
 
+	if(buffer == NULL) return "Error";
+	if(out == NULL)
+	{
+		log_errno("Unable to allocate memory for uptime output");
+		return "Error";
+	}
 
-error:
-	fclose(file_ostype);
-	free(name);
+	uptime = timespan_from_seconds(atoi(buffer));
+	free(buffer);
 
-	ERROR(strerror(errno));
-	return "Error";
+	if(snprintf(out,
+				OUT_LENGTH,
+				"%dd %dh %dm %ds",
+				uptime.d,
+				uptime.h,
+				uptime.m,
+				uptime.s)
+	   == -1)
+	{
+		free(out);
+		log_errno("Error occured while crafting uptime output string");
+		return "Error";
+	}
+
+	return out;
 }
 
-char* os_uptime(void)
-{
-	WARN("\"os_uptime\" not implemented in linux version");
-	return "14h 15m 13s";
-}
-
-#undef SYS_ERROR
 #endif

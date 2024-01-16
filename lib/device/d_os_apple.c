@@ -12,40 +12,45 @@ extern const int TRANSLATION_MOCK;
 
 #define SYS_ERROR -1
 
-char* os_name(void)
+char *device_os_name(void)
 {
-	literal NAME_KEY = "kern.hostname";
-	static char* name = NULL;
-	u64 name_len;
+	static char *name = NULL;
 
 	if(name != NULL) return name;
 
-	if(sysctlbyname(NAME_KEY, NULL, &name_len, NULL, 0) == SYS_ERROR)
-		goto error;
+	{
+		literal NAME_KEY = "kern.hostname";
+		u64 name_len;
 
-	name = malloc(name_len);
-	if(sysctlbyname(NAME_KEY, name, &name_len, NULL, 0) == SYS_ERROR)
-		goto error;
 
-	return name;
+		if(sysctlbyname(NAME_KEY, NULL, &name_len, NULL, 0) == SYS_ERROR)
+		{
+			log_errno("Error executing sysctl");
+			return "error";
+		}
 
-error:
-	free(name);
+		name = malloc(name_len);
+		if(sysctlbyname(NAME_KEY, name, &name_len, NULL, 0) == SYS_ERROR)
+		{
+			free(name);
+			log_errno("Error executing sysctl");
+			return "error";
+		}
 
-	ERROR(strerror(errno));
-	return "error";
+		return name;
+	}
 }
 
-char* os_uptime(void)
+char *device_os_uptime(void)
 {
 	struct timeval boot_time = {0};
 	u64 len = sizeof(boot_time);
 
 	const time_t now_time = time(0);
-	const struct tm* const tm = localtime(&now_time);
+	const struct tm * const tm = localtime(&now_time);
 
-	const int OUT_LEN = 16;
-	char* out = malloc(OUT_LEN);
+	const s8 OUT_LEN = 16;
+	char *out = malloc(OUT_LEN);
 
 	struct timespan_t timespan;
 
@@ -56,8 +61,13 @@ char* os_uptime(void)
 		goto error;
 
 	timespan = timespan_from_seconds(now_time - boot_time.tv_sec);
-	if(snprintf(out, OUT_LEN, "%dd %dh %dm %ds", timespan.d, timespan.h,
-				timespan.m, timespan.s)
+	if(snprintf(out,
+				OUT_LEN,
+				"%dd %dh %dm %ds",
+				timespan.d,
+				timespan.h,
+				timespan.m,
+				timespan.s)
 	   == -1)
 		goto error;
 
@@ -66,7 +76,7 @@ char* os_uptime(void)
 error:
 	free(out);
 
-	ERROR(strerror(errno));
+	log_errno(":D");
 	return "error";
 }
 

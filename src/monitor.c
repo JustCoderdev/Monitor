@@ -1,6 +1,8 @@
 #include <errno.h>
 #include <unistd.h>
 
+#define LOG_STREAM stdout
+
 #include "../lib/device.h"
 #include "../lib/file/reader/file_reader.h"
 #include "../lib/jcstd/jcstd.h"
@@ -11,23 +13,27 @@ void term_altbuff_enter(void);
 void term_altbuff_exit(void);
 
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
+
+#if 0
+	(void)argc;
+	(void)argv;
 	ASSERT(sizeof(s8) == 1)
 	ASSERT(sizeof(s16) == 2)
 	ASSERT(sizeof(s32) == 4)
 	ASSERT(sizeof(s64) == 8)
 
-#if 1
-	(void)argc;
-	(void)argv;
-
-#else
+/* #else */
 	FILE* file = fopen("../test.txt", "r");
 	char* buffer;
 
 	(void)argc;
 	(void)argv;
+	ASSERT(sizeof(s8) == 1)
+	ASSERT(sizeof(s16) == 2)
+	ASSERT(sizeof(s32) == 4)
+	ASSERT(sizeof(s64) == 8)
 
 	(void)file_read_until('[', file);
 	buffer = file_read_buffer_until(']', file);
@@ -41,17 +47,21 @@ error:
 	ERRNO("AAAAAA")
 	return EXIT_FAILURE;
 
-	/* #else */
+#else
+
 
 	const u8 UPDATE_RATE_S = 1;
-	u8 iterations = 15;
+	u8 iterations = 0;
+
+	log_info(device_os_name());
+
 
 	if(argc == 2) iterations = atoi(argv[1]);
 
 	setvbuf(stdout, NULL, _IOFBF, 0);
 	term_altbuff_enter();
 
-	while(--iterations > 0)
+	while(iterations-- > 0)
 	{
 		term_clear();
 
@@ -59,8 +69,8 @@ error:
 		putchar('\n');
 
 		printf("OPERATING SYSTEM\n");
-		printf(" .name: %s\n", os_name());
-		printf(" .uptime: %s\n", os_uptime());
+		printf(" .name: %s\n", device_os_name());
+		printf(" .uptime: %s\n", device_os_uptime());
 		putchar('\n');
 
 		printf("NETWORK\n");
@@ -95,6 +105,7 @@ error:
 
 		putchar('\n');
 		printf("Press ^C to quit: ");
+		putchar('\n');
 
 		fflush(stdout);
 		sleep(UPDATE_RATE_S);

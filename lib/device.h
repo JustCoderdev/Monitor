@@ -11,8 +11,8 @@
  * [ ] name ("macOS Monterey")
  * [ ] uptime (time) */
 
-extern char* os_name(void);
-extern char* os_uptime(void);
+extern char* device_os_name(void);
+extern char* device_os_uptime(void);
 
 
 /* ------  Network  ------
