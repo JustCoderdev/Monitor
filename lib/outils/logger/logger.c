@@ -108,7 +108,7 @@ void log_assert_internal(bool assertion, char* expression, char* file, int line)
 
 	/* clang-format off */
 	fprintf(LOG_STREAM,
-			CSI RESET Z BOLD    Z BG_RED   Z FG_WHITE M " ASSERT "
+			CSI RESET Z BOLD    Z BG_RED   Z FG_BR_WHITE M " ASSERT "
 			CSI RESET Z FG_BR_BLACK                   M " [%s:%d] "
 			CSI RESET                                 M "Assertion failed: \"%s\"\n",
 			file, line, expression);

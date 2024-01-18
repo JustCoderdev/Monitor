@@ -14,11 +14,11 @@
 
 *Operating System*
 - [x] OS Name   ("macOS Monterey")
-- [ ] OS Uptime (time)
+- [x] OS Uptime (time)
 
 *Network*
-- [ ] Net SSID    (“Webpocket”)
-- [ ] Net address (address, “Disconnected”)
+- [/] Net SSID    (“Webpocket”)
+- [/] Net address (address, “Disconnected”)
 
 *CPU*
 - [ ] CPU Usage (%)

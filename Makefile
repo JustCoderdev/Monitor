@@ -44,3 +44,8 @@ run_remote:
 	@echo "Running...  (Remote)"
 	@docker run -i --name monitor_instance monitor:0.1
 
+start_remote:
+	@echo "Starting container...  (Remote)"
+	@docker start monitor_instance
+	@docker attach monitor_instance
+

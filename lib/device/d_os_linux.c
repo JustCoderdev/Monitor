@@ -1,6 +1,6 @@
 #ifndef __linux__
 extern const int TRANSLATION_MOCK;
-/* #else */
+#else
 
 #include <errno.h>
 #include <time.h>
@@ -27,8 +27,6 @@ char *device_os_name(void)
 
 		os_name = file_read_buffer_until('\n', os_name_file);
 		fclose(os_name_file);
-
-		printf("Buffer content: '%*s'\n", 5, os_name);
 
 		if(os_name == NULL) return "error: B";
 	}
