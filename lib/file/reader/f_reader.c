@@ -58,7 +58,7 @@ char *file_read_buffer_until(char delimiter, FILE *file)
 }
 
 
-bool file_read_until(char delimiter, FILE *file)
+bool file_move_until(char delimiter, FILE *file)
 {
 	char c = '\0';
 
@@ -68,16 +68,14 @@ bool file_read_until(char delimiter, FILE *file)
 		if(c != delimiter) continue;
 
 		ungetc(c, file);
-		break;
+		return false;
 	}
 
 	if(ferror(file))
 	{
-		log_errno("Error reading a file");
+		log_errno("Error reading file");
 		clearerr(file);
-
-		return true;
 	}
 
-	return false;
+	return true;
 }

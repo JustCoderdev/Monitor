@@ -4,10 +4,10 @@
 FLAGS = -xc -Wall -Wextra -Werror -Wpedantic \
 	  	-pedantic -pedantic-errors -std=c89  \
 	  	-fcolor-diagnostics
-		# \ -F/usr/include/linux
+# \ -F/usr/include/linux
 
 
-SRC_FILES=$(wildcard src/*.c)       \
+SRC_FILES=$(wildcard src/tagunstripper.c)       \
 		  $(wildcard lib/*/*.c)     \
 		  $(wildcard lib/*/*/*.c)   \
 		  $(wildcard lib/*/*/*/*.c) \
@@ -21,12 +21,15 @@ clean:
 build: clean
 	@echo "Compiling..."
 	@mkdir bin
-	clang ${FLAGS} ${SRC_FILES} -o bin/monitor
+# clang ${FLAGS} ${SRC_FILES} -o bin/monitor
+	clang ${FLAGS} ${SRC_FILES} -o bin/tagunstripper
 
 run:
+# @chmod +x bin/monitor
+# @cd bin && ./monitor $(iter)
 	@echo "Running..."
-	@chmod +x bin/monitor
-	@cd bin && ./monitor $(iter)
+	@chmod +x bin/tagunstripper
+	@cd bin && ./tagunstripper "$(path)"
 
 
 remote: clean_remote build_remote run_remote
@@ -38,7 +41,7 @@ clean_remote:
 build_remote:
 	@echo "Building... (Remote)"
 	@docker build -t monitor:0.1 .
-	# --progress=plain
+# --progress=plain
 
 run_remote:
 	@echo "Running...  (Remote)"

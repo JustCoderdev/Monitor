@@ -16,7 +16,7 @@ extern char* file_read_buffer_until(char delimiter, FILE* file);
  * Move cursor position until specified content */
 
 /* Returns 1 if an error occured and logs error */
-extern bool file_read_until(char delimiter, FILE* file);
+extern bool file_move_until(char delimiter, FILE* file);
 
 
 #endif
